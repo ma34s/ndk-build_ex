@@ -81,6 +81,26 @@ void NdkBuild::ParseNdkOutput(char* output)
 		Console::Write(output);
 	}
 }
+
+void NdkBuild::ShowErrorCount()
+{
+	char buf[30];
+	sprintf_s(buf, sizeof(buf), "Errors: %d", errCount);
+	if (errCount) {
+		Console::WriteLine(buf, Console::Color::Red);
+	}
+	else {
+		Console::WriteLine(buf);
+	}
+	
+	sprintf_s(buf, sizeof(buf), "Warnings: %d", wrnCount);
+	if (wrnCount){
+		Console::WriteLine(buf, Console::Color::Yellow);
+	} else {
+		Console::WriteLine(buf);
+	}
+}
+
 int NdkBuild::Build()
 {
 	FILE *fp;
@@ -96,6 +116,7 @@ int NdkBuild::Build()
 		} else {
 			OnBuildSuccsess();
 		}
+		ShowErrorCount();
 	}
 	return result;
 }

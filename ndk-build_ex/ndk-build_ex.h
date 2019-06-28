@@ -13,6 +13,7 @@ namespace ndk_build_ex
 		void OnBuildFaild();
 		void OnBuildSuccsess();
 		void ParseNdkOutput(char* output);
+		void ShowErrorCount();
 	public:
 		NdkBuild();
 		void MakeCommand(int argc, char **argv);
