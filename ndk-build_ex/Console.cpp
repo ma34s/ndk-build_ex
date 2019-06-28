@@ -7,7 +7,7 @@
 
 static int initialColor;
 static int initialBackground;
-
+static FILE* fpLog = nullptr;
 
 void Console::Init()
 {
@@ -15,6 +15,20 @@ void Console::Init()
 	GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &consoleInfo);
 	initialColor = consoleInfo.wAttributes;
 	initialBackground = (initialColor & 0xF0) >> 4;
+	fpLog = nullptr;
+}
+
+int Console::SetLogfile(const char* path)
+{
+	return fopen_s(&fpLog, path, "wt");
+}
+
+void Console::CloseLogfile()
+{
+	if (fpLog){
+		fclose(fpLog);
+		fpLog = nullptr;
+	}
 }
 
 void Console::SetColor(unsigned int forgraund)
@@ -32,6 +46,9 @@ void Console::SetColor(unsigned int forgraund, unsigned int background)
 void Console::Write(const char* str)
 {
 	std::cout << str;
+	if (fpLog){
+		fprintf_s(fpLog, "%s", str);
+	}
 }
 
 void Console::Write(const char* str, unsigned int forgraund)

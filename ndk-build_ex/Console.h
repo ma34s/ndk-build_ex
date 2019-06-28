@@ -24,6 +24,9 @@ namespace Console
 		Length,
 	};
 	void Init();
+	int SetLogfile(const char* path);
+	void CloseLogfile();
+
 	void Write(const char* str);
 	void Write(const char* str, unsigned int forgraund);
 	void Write(const char* str, unsigned int forgraund, unsigned int background);
