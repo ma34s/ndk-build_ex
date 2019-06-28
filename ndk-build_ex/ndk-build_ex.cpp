@@ -11,6 +11,12 @@ using namespace ndk_build_ex;
 
 static const std::regex rLog("^log:");
 
+NdkBuild::NdkBuild()
+{
+	errCount = 0;
+	wrnCount = 0;
+}
+
 void NdkBuild::MakeCommand(int argc, char **argv)
 {
 	sprintf_s(commandLine, sizeof(commandLine), "ndk-build");
