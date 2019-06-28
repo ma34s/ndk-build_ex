@@ -240,3 +240,5 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+/ndk-build_ex/test/AndroidProject/libs
+/ndk-build_ex/test/AndroidProject/buildlog.txt
