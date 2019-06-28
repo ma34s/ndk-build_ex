@@ -40,13 +40,54 @@ void NdkBuild::MakeCommand(int argc, char **argv)
 	strcat_s(commandLine, sizeof(commandLine), " 2>&1");
 }
 
+static const std::regex patternError(":[0-9]*:[0-9]*:.*error:");
+static const std::regex patternWrings(":[0-9]*:[0-9]*:.*warning:");
+static const std::regex patternInstall("\\[*.\\] Install *:");
+static const std::regex patternStatic("\\[*.\\] StaticLibrary *:");
+static const std::regex patternShared("\\[*.\\] SharedLibrary *:");
+static const std::regex patternExecute("\\[*.\\] Executable *:");
+static const std::regex patternCursol("\\s+\\^+\\s*");
+
+void NdkBuild::ParseNdkOutput(char* output)
+{
+	std::match_results<const char *> results;
+
+	if (std::regex_search(output, results, patternCursol, std::regex_constants::match_default)) {
+		Console::Write(output, Console::Color::DarkMagenta);
+	}
+	else if (std::regex_search(output, results, patternError, std::regex_constants::match_default)) {
+		errCount++;
+		Console::Write(output, Console::Color::Red);
+	}
+	else if (std::regex_search(output, results, patternWrings, std::regex_constants::match_default)) {
+		wrnCount++;
+		Console::Write(output, Console::Color::Yellow);
+	}
+	else if (std::regex_search(output, results, patternInstall, std::regex_constants::match_default)) {
+		Console::Write(output, Console::Color::Green);
+	}
+	else if (std::regex_search(output, results, patternStatic, std::regex_constants::match_default)) {
+		Console::Write(output, Console::Color::DarkCyan);
+	}
+	else if (std::regex_search(output, results, patternShared, std::regex_constants::match_default)) {
+		Console::Write(output, Console::Color::Blue);
+	}
+	else if (std::regex_search(output, results, patternExecute, std::regex_constants::match_default)) {
+		Console::Write(output, Console::Color::Blue);
+	}
+	else
+	{
+		Console::ResetColor();
+		Console::Write(output);
+	}
+}
 int NdkBuild::Build()
 {
 	FILE *fp;
 	int result;
 	if (fp = _popen(commandLine, "r")) {
 		while (fgets(output, sizeof(output), fp)) {
-			Console::Write(output);
+			ParseNdkOutput(output);
 		}
 		result = _pclose(fp);
 		Console::WriteLine("");
