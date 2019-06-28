@@ -39,6 +39,8 @@ void NdkBuild::MakeCommand(int argc, char **argv)
 		}
 	}
 	strcat_s(commandLine, sizeof(commandLine), " 2>&1");
+	Console::Write("[ndk_build_ex] Info : command line: ", Console::Color::DarkMagenta);
+	Console::WriteLine(commandLine, Console::Color::DarkMagenta);
 }
 
 static const std::regex patternError(":[0-9]*:[0-9]*:.*error:");
